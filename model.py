@@ -68,7 +68,7 @@ def _preprocess_data(data):
     feature_vector_dict = json.loads(data)
     # Load the dictionary as a Pandas DataFrame.
     feature_vector_df = pd.DataFrame.from_dict([feature_vector_dict])
-
+    df  = feature_vector_df
     # ---------------------------------------------------------------
     # NOTE: You will need to swap the lines below for your own data
     # preprocessing methods.
@@ -77,7 +77,7 @@ def _preprocess_data(data):
   # Dropping Redundant and unsusable features
     snow = sorted([col for col in df.columns if 'snow' in col])
     weather = sorted([col for col in df.columns if 'weather' in col])
-    redundant_features = ['Barcelona_rain_3h', 'Seville_rain_3h']
+    redundant_features = ['Barcelona_rain_3h', 'Seville_rain_3h','Seville_pressure']
     df.drop(columns = snow, inplace=True)
     df.drop(columns = weather, inplace=True)
     df.drop(columns = redundant_features, inplace=True)
@@ -85,6 +85,9 @@ def _preprocess_data(data):
   # remove Rows with pressure values less than 945 and greater than 1055 to subset for outliers
     df = df[df['Barcelona_pressure']>= 945] 
     df = df[df['Barcelona_pressure']<= 1051]
+  # # Filling Valencia pressure nan with mean
+    mean_val = 1013.1483509056449
+    df['Valencia_pressure'] = df['Valencia_pressure'].fillna(mean_val)
 
   #Dropping all columns for minimum and maximum temperature readings
     temp = sorted([col for col in df.columns if 'temp' in col])
@@ -94,7 +97,7 @@ def _preprocess_data(data):
     df = df.drop(columns= min_max_temp)
     
   #Deleting columns withh more than 50% 0 values for testing
-    zero_columns = ['Madrid_rain_1h', 'Seville_rain_1h','Barcelona_rain_1h','Bilbao_rain_1h','Seville_pressure']
+    zero_columns = ['Madrid_rain_1h', 'Seville_rain_1h','Barcelona_rain_1h','Bilbao_rain_1h']
     df.drop(columns = zero_columns, inplace=True)
 
   ## converting time object to datetime
