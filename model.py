@@ -26,26 +26,7 @@ import numpy as np
 import pandas as pd
 import pickle
 import json
-# Libraries for data loading, data manipulation and data visulisation
-import matplotlib.pyplot as plt
-import seaborn as sns
-import IPython
-import re
-# Libraries for data preparation and model building
-import xgboost as xgb
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_absolute_error
-from xgboost.sklearn import XGBRegressor
-from sklearn.metrics import mean_squared_error, r2_score
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.preprocessing import LabelEncoder, OneHotEncoder, StandardScaler
-from sklearn.ensemble import RandomForestRegressor, AdaBoostRegressor
-from sklearn import linear_model
-from fast_ml.feature_engineering import FeatureEngineering_DateTime
-import sys
-sys.path.append("kuma_utils/")
-#from kuma_utils.preprocessing.imputer import LGBMImputer
+
 
 def _preprocess_data(data):
     """Private helper function to preprocess data for model prediction.
@@ -72,7 +53,7 @@ def _preprocess_data(data):
     # ---------------------------------------------------------------
     # NOTE: You will need to swap the lines below for your own data
     # preprocessing methods.
-    #df =  df.drop(columns= 'Unnamed: 0')
+    df =  df.drop(columns= 'Unnamed: 0')
 
   # Dropping Redundant and unsusable features
     snow = sorted([col for col in df.columns if 'snow' in col])
@@ -170,7 +151,9 @@ def make_prediction(data, model):
     """
     # Data preprocessing.
     prep_data = _preprocess_data(data)
+    print(prep_data.iloc[:5])
     # Perform prediction with model and preprocessed data.
     prediction = model.predict(prep_data)
     # Format as list for output standardisation.
-    return prediction[0].tolist()
+    prediction_list = prediction[0].tolist()
+    return prediction_list
